@@ -1,0 +1,126 @@
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { MyAuth } from "../context/AuithContext";
+
+const Register = () => {
+     let {reset,handleSubmit,formState:{errors},register}=useForm();
+     let{loggedUser ,registerUser,setRegisterUser}=useContext(MyAuth)
+    let navigate=useNavigate()
+    const formSubmit=(data)=>{
+      let arr=[...registerUser,data]
+      setRegisterUser(arr)
+      localStorage.setItem("registerUser",JSON.stringify(arr))
+       alert("you are registerd ")
+       reset();
+    }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-blue-100 px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+
+        {/* Heading */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">
+           Create Account
+          </h1>
+
+          <p className="text-gray-500 mt-2">
+            Join FinTrack 
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit(formSubmit)}
+        className="space-y-5">
+
+          {/* Username */}
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-semibold text-gray-700 mb-2"
+            >
+             Choose a Username
+            </label>
+
+            <input
+            {...register("username", {
+          required: "Username is required",
+          pattern: {
+            value: /^[A-Za-z0-9_]{3,20}$/,
+            message: "Username must be 3-20 characters",
+          },
+        })}
+              type="text"
+              id="username"
+              placeholder="Enter your username"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg
+                         focus:outline-none focus:ring-2 focus:ring-indigo-500
+                         focus:border-indigo-500 transition"
+             
+            />
+            {errors.username && <p className="text-red-700" >{errors.username.message}</p>}
+           
+          </div>
+
+          {/* Password */}
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-semibold text-gray-700 mb-2"
+            >
+              Password
+            </label>
+
+            <input
+                   {...register("password", {
+          required: "Password is required",
+          pattern: {
+            value: /^[A-Za-z0-9_]{3,20}$/,
+            message: "Password must be 3-20 characters",
+          },
+        })}
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg
+                         focus:outline-none focus:ring-2 focus:ring-indigo-500
+                         focus:border-indigo-500 transition"
+              
+            />
+            {errors.password && <p className="text-red-700">{errors.password.message}</p>}
+          </div>
+
+         
+
+          {/* Login Button */}
+          <button
+            type="submit"
+            className="w-full py-3 bg-indigo-600 text-white rounded-lg
+                       font-semibold hover:bg-indigo-700
+                       focus:outline-none focus:ring-2
+                       focus:ring-indigo-500 focus:ring-offset-2
+                       transition"
+          >
+            Login
+          </button>
+
+        </form>
+
+        {/* Register */}
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Already have an account?
+          
+           <button onClick={()=>{
+            navigate("/")
+           }}
+           className="text-blue-600 text-bold">Login Here</button>
+          
+        </p>
+
+      </div>
+    </div>
+  );
+};
+
+export default Register;
